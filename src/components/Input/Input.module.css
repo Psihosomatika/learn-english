@@ -1,0 +1,16 @@
+.input {
+  height: var(--line-height-m);
+  border-color: var(--color-gray);
+  margin-left: var(--indentation-s);
+  font-size: medium;
+  width: 65%;
+  text-align: left;
+  padding-left: var(--indentation-m);
+}
+.input:focus {
+  outline: none;
+}
+.danger{
+  border-color: var(--color-danger);
+
+}

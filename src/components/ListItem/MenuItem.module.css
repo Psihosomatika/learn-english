@@ -1,0 +1,8 @@
+.navItem {
+  margin-left: var(--indentation-m);
+  color: var(--color-dark);
+  text-align: center;
+}
+.navItem:hover {
+  text-decoration: underline;
+}

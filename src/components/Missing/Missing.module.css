@@ -1,0 +1,10 @@
+.img {
+  width: 40vw;
+}
+.link {
+  color: var(--color-dark);
+  text-decoration: none;
+}
+.link:hover {
+  text-decoration: underline;
+}
