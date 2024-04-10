@@ -1,15 +1,15 @@
 import styles from "./Card.module.css";
 import EditButton from "../Buttons/EditButton";
-import React, { useState, useEffect, useRef } from "react";
-import data from "../../words.json";
-
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { Context } from "../../App";
 export default function Card({ cardIndex, onClickEditButton }) {
   const buttonRef = useRef();
   const [checkTranslation, setCheckTranslation] = useState(false);
-
+  const { words } = useContext(Context);
+  // console.log(words[cardIndex]);
   const handleCheckTranslation = () => {
     setCheckTranslation(true);
-    onClickEditButton(data[cardIndex].id);
+    onClickEditButton(words[cardIndex].id);
   };
   useEffect(() => {
     setCheckTranslation(false);
@@ -18,12 +18,12 @@ export default function Card({ cardIndex, onClickEditButton }) {
     buttonRef.current.focus();
   }, []);
   return (
-    <div className={styles.card} key={data[cardIndex].id}>
-      <p className={styles.title}>{data[cardIndex].english}</p>
-      <p className={styles.transcription}>{data[cardIndex].transcription}</p>
+    <div className={styles.card} key={words[cardIndex].id}>
+      <p className={styles.title}>{words[cardIndex].english}</p>
+      <p className={styles.transcription}>{words[cardIndex].transcription}</p>
       <div>
         {checkTranslation ? (
-          <p className={styles.title}>{data[cardIndex].russian}</p>
+          <p className={styles.title}>{words[cardIndex].russian}</p>
         ) : (
           <EditButton
             onClickEditButton={handleCheckTranslation}

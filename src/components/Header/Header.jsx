@@ -1,11 +1,13 @@
+import { useContext } from "react";
 import EditButton from "../Buttons/EditButton";
 import MenuItem from "../ListItem/MenuItem";
 import styles from "./Header.module.css";
 import { Link, useLocation } from "react-router-dom";
+import { Context } from "../../App";
 
-export default function Header({ onClickEditButton, disabled }) {
+export default function Header({ onClickEditButton}) {
   const location = useLocation();
-
+  const { hideButton } = useContext(Context);
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
@@ -23,7 +25,7 @@ export default function Header({ onClickEditButton, disabled }) {
                 onClickEditButton={onClickEditButton}
                 textButton="Добавить слово"
                 color="primary"
-                disabled={disabled}
+                disabled={hideButton}
               />
               <Link to="/cards" className={styles.link}>
                 <EditButton textButton="Тренироваться" color="secondary" />

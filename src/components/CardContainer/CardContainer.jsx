@@ -1,19 +1,20 @@
 import Button from "../Buttons/Button";
 import Card from "../Card/Card";
 import styles from "./CardContainer.module.css";
-import { useState } from "react";
-import data from "../../words.json";
+import { useState, useContext } from "react";
+import { Context } from "../../App";
 
 export default function CardContainer() {
   const [index, setIndex] = useState(0);
   const [count, setCount] = useState(0);
   const [wordsLearned, setWorldsLearned] = useState([]);
+  const { words } = useContext(Context);
 
   const handleIndexIncrease = () => {
-    index < data.length - 1 ? setIndex(index + 1) : setIndex(0);
+    index < words.length - 1 ? setIndex(index + 1) : setIndex(0);
   };
   const handleIndexReduce = () => {
-    index > 0 ? setIndex(index - 1) : setIndex(data.length - 1);
+    index > 0 ? setIndex(index - 1) : setIndex(words.length - 1);
   };
   const handleSetCount = (id) => {
     if (!wordsLearned.includes(id)) {
