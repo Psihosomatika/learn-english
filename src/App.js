@@ -12,22 +12,28 @@ export const Context = createContext();
 export default function App() {
   const [addRow, setAddRow] = useState(false);
   const [hideButton, setHideButton] = useState(false);
-  const [loading, setLoading]=useState(true);
+  const [loading, setLoading] = useState(true);
   const [words, setWords] = useState([]);
+  const [err, setErr] = useState(null);
   const getApiData = async () => {
     try {
-      const response = await fetch("/api/words").then((response) =>
-        response.json()
-      );
+      const response = await fetch("/api/words").then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Что-то пошло не так...");
+        }
+      });
       setWords(response);
       setLoading(false);
     } catch (err) {
-      console.error(err);
+      setErr(err);
+      setLoading(false);
     }
   };
   useEffect(() => {
     getApiData();
-  }, []);
+  },[]);
   const handleAddRowStart = () => {
     setAddRow(true);
   };
@@ -49,11 +55,15 @@ export default function App() {
                 element={
                   <>
                     {addRow && <EditForm onClickEditButton={handleAddRowEnd} />}
-                    {loading?<Loading/>:<WordList onClickEditButton={handleSetEdit} />}
+                    {loading && <Loading />}
+                    {err && <p>{err.message}</p>}
+                    {!loading && !err && (
+                      <WordList onClickEditButton={handleSetEdit} />
+                    )}
                   </>
                 }
               />
-              <Route path="/cards" element={<CardContainer />} />
+              <Route path="/cards" element={<CardContainer/>} />
               <Route path="*" element={<Missing />} />
             </Routes>
           </main>
