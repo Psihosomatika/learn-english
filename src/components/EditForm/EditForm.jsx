@@ -3,32 +3,36 @@ import EditButton from "../Buttons/EditButton";
 import Input from "../Input/Input";
 import cn from "classnames";
 import useInputChecking from "../../hooks/useInputChecking";
-
+import { useContext } from "react";
+import Context from "../../Context/DataContext";
 export default function EditForm(props) {
+  const { updateWord, addWord } = useContext(Context);
   const {
     onClickEditButton,
     rowSelect,
     editableWord,
     editableTranscription,
     editableTranslation,
+    wordId,
   } = props;
-
   const {
-    value: valueWord,
+    value: english,
     isDanger: isDangerWord,
     wasInputTouch: wasInputWordTouch,
+    emptyInput: emptyInputWord,
     handleEdit: handleEditWord,
-    handleLostFocusInput:handleLostFocusWord,
+    handleLostFocusInput: handleLostFocusWord,
   } = useInputChecking((value) => {
     value === "" && console.log("Укажите слово");
     return value === "";
   }, editableWord);
   const {
-    value: valueTranscription,
+    value: transcription,
     isDanger: isDangerTranscription,
     wasInputTouch: wasInputTranscriptionTouch,
+    emptyInput: emptyInputTranscription,
     handleEdit: handleEditTranscription,
-    handleLostFocusInput:handleLostFocusTranscription
+    handleLostFocusInput: handleLostFocusTranscription,
   } = useInputChecking((value) => {
     (value === "" || !value.match(/^\[[^)]+\]$/)) &&
       console.log(
@@ -37,50 +41,52 @@ export default function EditForm(props) {
     return value === "" || !value.match(/^\[[^)]+\]$/);
   }, editableTranscription);
   const {
-    value: valueTranslation,
+    value: russian,
     isDanger: isDangerTranslation,
     wasInputTouch: wasInputTranslationTouch,
+    emptyInput: emptyInputTranslation,
     handleEdit: handleEditTranslation,
-    handleLostFocusInput:handleLostFocusTranslation
+    handleLostFocusInput: handleLostFocusTranslation,
   } = useInputChecking((value) => {
     value === "" && console.log("Укажите перевод");
     return value === "";
   }, editableTranslation);
   const editStyle = cn(styles.editForm, rowSelect && styles.editFormExisting);
   let disabled = false;
-  valueWord === "" ||
-  valueTranscription === "" ||
-  valueTranslation === "" ||
-  !valueTranscription.match(/^\[[^)]+\]$/)
+  english === "" ||
+  transcription === "" ||
+  russian === "" ||
+  !transcription.match(/^\[[^)]+\]$/)
     ? (disabled = true)
     : (disabled = false);
   const handleSave = () => {
-    console.log(
-      `Слово: ${valueWord}, Транскрипция: ${valueTranscription}, Перевод: ${valueTranslation}`
-    );
+    const updatedWord = { english, transcription, russian };
     onClickEditButton();
+    emptyInputWord && emptyInputTranscription && emptyInputTranslation
+      ? addWord(updatedWord)
+      : updateWord(updatedWord, wordId);
   };
   return (
     <div className={editStyle}>
       <div className={styles.inputGroup}>
         <Input
           onChange={handleEditWord}
-          value={valueWord}
-          danger={wasInputWordTouch&&isDangerWord}
+          value={english}
+          danger={wasInputWordTouch && isDangerWord}
           placeholderText="Слово"
           onBlur={handleLostFocusWord}
         />
         <Input
           onChange={handleEditTranscription}
-          value={valueTranscription}
-          danger={wasInputTranscriptionTouch&&isDangerTranscription}
+          value={transcription}
+          danger={wasInputTranscriptionTouch && isDangerTranscription}
           placeholderText="Транскрипция"
           onBlur={handleLostFocusTranscription}
         />
         <Input
           onChange={handleEditTranslation}
-          value={valueTranslation}
-          danger={wasInputTranslationTouch&&isDangerTranslation}
+          value={russian}
+          danger={wasInputTranslationTouch && isDangerTranslation}
           placeholderText="Перевод"
           onBlur={handleLostFocusTranslation}
         />
@@ -95,7 +101,7 @@ export default function EditForm(props) {
         <EditButton
           onClickEditButton={onClickEditButton}
           color="danger"
-          icon="delete"
+          icon="close"
         />
       </>
     </div>

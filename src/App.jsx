@@ -1,13 +1,12 @@
 import "./App.css";
 import Header from "./components/Header/Header";
-import { useState, createContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import EditForm from "./components/EditForm/EditForm";
 import WordList from "./components/WordList/WordList";
 import CardContainer from "./components/CardContainer/CardContainer";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Missing from "./components/Missing/Missing";
-import Loading from "./components/Loading/Loading";
-export const Context = createContext();
+import Context from "./Context/DataContext";
 
 export default function App() {
   const [addRow, setAddRow] = useState(false);
@@ -15,7 +14,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState([]);
   const [err, setErr] = useState(null);
-  const getApiData = async () => {
+  const fetchWords = async () => {
     try {
       const response = await fetch("/api/words").then((response) => {
         if (response.ok) {
@@ -32,8 +31,40 @@ export default function App() {
     }
   };
   useEffect(() => {
-    getApiData();
-  },[]);
+    fetchWords();
+  }, []);
+  const updateWord = async (updatedWord, updatedId) => {
+    console.log('изменное слово');
+    console.log(updatedWord);
+    console.log(`id: ${updatedId}`);
+    const response = await fetch(`/api/words/${updatedId}/update`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedWord)
+    });
+    const data = await response.json();
+    console.log(response, data);
+    setWords(words.map((word) => (word.id === updatedId ? data : word)));
+  };
+  const deleteWord = async (deleteId) => {
+    await fetch(`/api/words/${deleteId}/delete`, {
+      method: "POST",
+    });
+    setWords(words.filter((word) => word.id !== deleteId));
+  };
+  const addWord = async (addedWord) => {
+    const response = await fetch(`/api/words/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(addedWord),
+    });
+    const data = await response.json();
+    setWords((words) => [...words, data]);
+  };
   const handleAddRowStart = () => {
     setAddRow(true);
   };
@@ -45,7 +76,19 @@ export default function App() {
   };
   return (
     <div className="App">
-      <Context.Provider value={{ words, addRow, hideButton }}>
+      <Context.Provider
+        value={{
+          words: words,
+          addRow: addRow,
+          hideButton: hideButton,
+          loading: loading,
+          err: err,
+          fetchWords: fetchWords,
+          updateWord,
+          deleteWord,
+          addWord,
+        }}
+      >
         <Router>
           <Header onClickEditButton={handleAddRowStart} />
           <main>
@@ -55,15 +98,11 @@ export default function App() {
                 element={
                   <>
                     {addRow && <EditForm onClickEditButton={handleAddRowEnd} />}
-                    {loading && <Loading />}
-                    {err && <p>{err.message}</p>}
-                    {!loading && !err && (
-                      <WordList onClickEditButton={handleSetEdit} />
-                    )}
+                    <WordList onClickEditButton={handleSetEdit} />
                   </>
                 }
               />
-              <Route path="/cards" element={<CardContainer/>} />
+              <Route path="/cards" element={<CardContainer />} />
               <Route path="*" element={<Missing />} />
             </Routes>
           </main>

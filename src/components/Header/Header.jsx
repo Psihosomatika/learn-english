@@ -3,7 +3,7 @@ import EditButton from "../Buttons/EditButton";
 import MenuItem from "../ListItem/MenuItem";
 import styles from "./Header.module.css";
 import { Link, useLocation } from "react-router-dom";
-import { Context } from "../../App";
+import Context from "../../Context/DataContext";
 
 export default function Header({ onClickEditButton}) {
   const location = useLocation();

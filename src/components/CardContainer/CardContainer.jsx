@@ -2,13 +2,14 @@ import Button from "../Buttons/Button";
 import Card from "../Card/Card";
 import styles from "./CardContainer.module.css";
 import { useContext, useState } from "react";
-import { Context } from "../../App";
+import Context from "../../Context/DataContext";
+import Loading from "../Loading/Loading";
 
 export default function CardContainer() {
   const [index, setIndex] = useState(0);
   const [count, setCount] = useState(0);
   const [wordsLearned, setWorldsLearned] = useState([]);
-  const {words}=useContext(Context);
+  const {words,loading, err}=useContext(Context);
   const handleIndexIncrease = () => {
     index < words.length - 1 ? setIndex(index + 1) : setIndex(0);
   };
@@ -21,6 +22,11 @@ export default function CardContainer() {
       setCount(count + 1);
     }
   };
+  if (loading) {
+    return <Loading />;
+  } else if (err) {
+    return <p>{err.message}</p>;
+  } else
   return (
     <>
       <h1 className={styles.h1}>Изучено карточек: {count} </h1>
