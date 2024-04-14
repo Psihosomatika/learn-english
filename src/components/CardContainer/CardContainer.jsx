@@ -4,7 +4,7 @@ import styles from "./CardContainer.module.css";
 import { useContext, useState } from "react";
 import Context from "../../Context/DataContext";
 import Loading from "../Loading/Loading";
-
+import Error from "../Error/Error";
 export default function CardContainer() {
   const [index, setIndex] = useState(0);
   const [count, setCount] = useState(0);
@@ -25,7 +25,7 @@ export default function CardContainer() {
   if (loading) {
     return <Loading />;
   } else if (err) {
-    return <p>{err.message}</p>;
+    return <Error errorMessage={err.message}/>;
   } else
   return (
     <>

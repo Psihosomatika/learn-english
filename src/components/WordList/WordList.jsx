@@ -3,7 +3,7 @@ import Row from "../Row/Row";
 import { useContext } from "react";
 import Context from "../../Context/DataContext";
 import Loading from "../Loading/Loading";
-
+import Error from "../Error/Error";
 export default function WordList(props) {
   const { onEdit, onClickEditButton } = props;
   const { words, loading, err } = useContext(Context);
@@ -11,7 +11,7 @@ export default function WordList(props) {
   if (loading) {
     return <Loading />;
   } else if (err) {
-    return <p>{err.message}</p>;
+    return <Error errorMessage={err.message}/>;
   } else
     return (
       <div className={styles.table}>
