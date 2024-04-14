@@ -61,10 +61,10 @@ export default function EditForm(props) {
     : (disabled = false);
   const handleSave = () => {
     const updatedWord = { english, transcription, russian };
-    onClickEditButton();
-    emptyInputWord && emptyInputTranscription && emptyInputTranslation
+        emptyInputWord && emptyInputTranscription && emptyInputTranslation
       ? addWord(updatedWord)
       : updateWord(updatedWord, wordId);
+      onClickEditButton();
   };
   return (
     <div className={editStyle}>

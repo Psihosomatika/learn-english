@@ -34,7 +34,7 @@ export default function App() {
     fetchWords();
   }, []);
   const updateWord = async (updatedWord, updatedId) => {
-    console.log('изменное слово');
+    console.log("изменное слово");
     console.log(updatedWord);
     console.log(`id: ${updatedId}`);
     const response = await fetch(`/api/words/${updatedId}/update`, {
@@ -42,10 +42,10 @@ export default function App() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(updatedWord)
+      body: JSON.stringify(updatedWord),
     });
     const data = await response.json();
-    console.log(response, data);
+    console.log(data);
     setWords(words.map((word) => (word.id === updatedId ? data : word)));
   };
   const deleteWord = async (deleteId) => {
