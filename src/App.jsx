@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import EditForm from "./components/EditForm/EditForm";
 import WordList from "./components/WordList/WordList";
 import CardContainer from "./components/CardContainer/CardContainer";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Missing from "./components/Missing/Missing";
 import Context from "./Context/DataContext";
 
@@ -34,9 +34,6 @@ export default function App() {
     fetchWords();
   }, []);
   const updateWord = async (updatedWord, updatedId) => {
-    console.log("изменное слово");
-    console.log(updatedWord);
-    console.log(`id: ${updatedId}`);
     const response = await fetch(`/api/words/${updatedId}/update`, {
       method: "POST",
       headers: {
@@ -45,7 +42,6 @@ export default function App() {
       body: JSON.stringify(updatedWord),
     });
     const data = await response.json();
-    console.log(data);
     setWords(words.map((word) => (word.id === updatedId ? data : word)));
   };
   const deleteWord = async (deleteId) => {

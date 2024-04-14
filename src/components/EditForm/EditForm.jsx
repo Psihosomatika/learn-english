@@ -60,7 +60,7 @@ export default function EditForm(props) {
     ? (disabled = true)
     : (disabled = false);
   const handleSave = () => {
-    const updatedWord = { english, transcription, russian };
+    const updatedWord = { english, transcription, russian, id:wordId,tags:"" };
         emptyInputWord && emptyInputTranscription && emptyInputTranslation
       ? addWord(updatedWord)
       : updateWord(updatedWord, wordId);
