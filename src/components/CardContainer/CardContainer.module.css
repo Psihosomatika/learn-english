@@ -1,8 +1,0 @@
-.cardContainer{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.h1{
-    color: var( --color-success-hover);
-}
