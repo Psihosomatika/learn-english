@@ -14,7 +14,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState([]);
   const [err, setErr] = useState(null);
-  const baseUrl = "http://itgirlschool.justmakeit.ru";
+  const baseUrl = "https://itgirlschool.justmakeit.ru";
   const fetchWords = async () => {
     try {
       const response = await fetch(`${baseUrl}/api/words`).then((response) => {
