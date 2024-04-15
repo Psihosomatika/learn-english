@@ -14,9 +14,10 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [words, setWords] = useState([]);
   const [err, setErr] = useState(null);
+  const baseUrl = "http://itgirlschool.justmakeit.ru";
   const fetchWords = async () => {
     try {
-      const response = await fetch("/api/words").then((response) => {
+      const response = await fetch(`${baseUrl}/api/words`).then((response) => {
         if (response.ok) {
           return response.json();
         } else {
@@ -34,7 +35,7 @@ export default function App() {
     fetchWords();
   }, []);
   const updateWord = async (updatedWord, updatedId) => {
-    const response = await fetch(`/api/words/${updatedId}/update`, {
+    const response = await fetch(`${baseUrl}/api/words/${updatedId}/update`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,13 +46,13 @@ export default function App() {
     setWords(words.map((word) => (word.id === updatedId ? data : word)));
   };
   const deleteWord = async (deleteId) => {
-    await fetch(`/api/words/${deleteId}/delete`, {
+    await fetch(`${baseUrl}/api/words/${deleteId}/delete`, {
       method: "POST",
     });
     setWords(words.filter((word) => word.id !== deleteId));
   };
   const addWord = async (addedWord) => {
-    const response = await fetch(`/api/words/add`, {
+    const response = await fetch(`${baseUrl}/api/words/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
